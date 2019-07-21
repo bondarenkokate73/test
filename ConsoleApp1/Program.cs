@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Security.Policy;
 using NUnit.Allure.Attributes;
 using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
 
 namespace ConsoleApp1
 {
@@ -24,7 +21,7 @@ namespace ConsoleApp1
         {
             grid = new GRID();
             driver = grid.getDriver();     // = new ChromeDriver(Environment.CurrentDirectory);
-            browser = new WorkWithBrowser(name, email);
+            browser = new WorkWithBrowser(driver, name, email);
             pg = new PageObject(driver, "https://gmail.com");
             Test();
         }
@@ -33,14 +30,14 @@ namespace ConsoleApp1
         [AllureSuite("Connect")]
         static void Test()
         {
-            if (browser.Connect(driver, "test19bond@gmail.com", "test19bondtest19bond"))
+            if (browser.Connect("test19bond@gmail.com", "test19bondtest19bond"))
             {
                 browser.FindLetters(name, email);
                 if (browser.SendLeter(email))
                 {
                     success = true;
                 }
-                pg.Quit();
+                browser.Quit();
             }
             else
             {

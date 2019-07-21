@@ -88,6 +88,7 @@
     <Compile Include="PageObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkWithLocators.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="allureConfig.Template.json" />

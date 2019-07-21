@@ -1,32 +1,29 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
     public class PageObject
     {
-        By textGoInLocator = By.ClassName("INl6Jd");
-        By inputReservEmail = By.ClassName("whsOnd");
-        By buttonGoInLocator = By.TagName("a");
-        By buttonVerifEmail = By.ClassName("vR13fe");
+        private By textGoInLocator = By.ClassName("INl6Jd");
+        private By inputReservEmail = By.ClassName("whsOnd");
+        private By buttonGoInLocator = By.TagName("a");
+        private By buttonVerifEmail = By.ClassName("vR13fe");
         //LoginLocators
-        By usernameLocator = By.Id("identifierId");
-        By passwordLocator = By.Name("password");
+        private By usernameLocator = By.Id("identifierId");
+        private By passwordLocator = By.Name("password");
         //SearchLocators
-        By searchLocator = By.ClassName("gb_cf");
-        By findAllLettersLocator = By.ClassName("xS");
-        By findLettersFromEmailLocator = By.ClassName("gD");
+        private By searchLocator = By.ClassName("gb_cf");
+        private By findAllLettersLocator = By.ClassName("xS");
+        private By findLettersFromEmailLocator = By.ClassName("gD");
         //SendLetterLocators
-        By buttonWriteLetterLocator = By.ClassName("z0");
-        By adressLocator = By.Name("to");
-        By themeAndtextOfLetterLocator = By.ClassName("aoT");
-        By letterWasSendLocator = By.ClassName("bAq");
+        private By buttonWriteLetterLocator = By.ClassName("z0");
+        private By adressLocator = By.Name("to");
+        private By themeAndtextOfLetterLocator = By.ClassName("aoT");
+        private By letterWasSendLocator = By.ClassName("bAq");
 
         private IWebDriver driver;
 
@@ -36,7 +33,7 @@ namespace ConsoleApp1
             driver.Navigate().GoToUrl(url);
         }
 
-        public void Wait(By locator)
+        private void Wait(By locator)
         {
             try
             {
@@ -49,65 +46,56 @@ namespace ConsoleApp1
             }
         }
 
-        public void Back()
-        {
-            driver.Navigate().Back();
-        }
-
-        public void Quit()
-        {
-            driver.Quit();
-        }
-
         //FindElements
-        private string typeReConnectLink()
+        public string typeReConnectLink()
         {
             return driver.FindElements(buttonGoInLocator)
                 .Where(a => a.Text.Trim().Equals("Войти")).First().GetAttribute("href");
         }
 
-        private void typeVerifiEmail()
+        public IWebElement typeVerifiEmail()
         {
             Wait(textGoInLocator);
             if (driver.FindElement(textGoInLocator).Text.Trim().Equals("Подтвердите резервный адрес электронной почты"))
             {
                 driver.FindElement(buttonVerifEmail).Click();
                 Wait(inputReservEmail);
-                driver.FindElement(inputReservEmail).SendKeys("bondarenkokate73@yandex.ru" + Keys.Enter);
+                return driver.FindElement(inputReservEmail);
             }
+            return null;
         }
 
-        private void typeUsername(string username)
+        public IWebElement typeUsername()
         {
             Wait(usernameLocator);
-            driver.FindElement(usernameLocator).SendKeys(username + Keys.Enter);
+            return driver.FindElement(usernameLocator);
         }
 
-        private void typePassword(string password)
+        public IWebElement typePassword()
         {
             Wait(passwordLocator);
-            driver.FindElement(passwordLocator).SendKeys(password + Keys.Enter);
+            return driver.FindElement(passwordLocator);
         }
 
-        private void typeButtonSend()
+        public IWebElement typeButtonSend()
         {
             Wait(buttonWriteLetterLocator);
-            driver.FindElement(buttonWriteLetterLocator).Click();
+            return driver.FindElement(buttonWriteLetterLocator);
         }
 
-        private void typeAdress(string email)
+        public IWebElement typeAdress()
         {
             Wait(adressLocator);
-            driver.FindElement(adressLocator).SendKeys(email);
+            return driver.FindElement(adressLocator);
         }
 
-        private void typeText(string theme, string text)
+        public IWebElement typeText()
         {
             Wait(themeAndtextOfLetterLocator);
-            driver.FindElement(themeAndtextOfLetterLocator).SendKeys(theme + Keys.Tab + text + (Keys.Control + Keys.Enter));
+            return driver.FindElement(themeAndtextOfLetterLocator);
         }
 
-        private IWebElement[] typeSearch(string email)
+        public IWebElement[] typeSearch(string email)
         {
             IWebElement[] resultArray;
             Wait(searchLocator);
@@ -121,56 +109,17 @@ namespace ConsoleApp1
             return resultArray;
         }
 
-        private IWebElement[] typeFindLettersOnPage()
+        public IWebElement[] typeFindLettersOnPage()
         {
             Wait(findLettersFromEmailLocator);
             return driver.FindElements(findLettersFromEmailLocator).ToArray();
         }
 
-        private bool typeLetterWasSend()
+        public bool typeLetterWasSend()
         {
             Thread.Sleep(2000);
             return driver.FindElement(letterWasSendLocator).Text.Trim().Equals("Письмо отправлено.");
 
-        }
-
-        //WorkWithElements
-        public void loginAs(string username, string password)
-        {
-            typeUsername(username);
-            typePassword(password);
-        }
-
-        public IWebElement[] findEmailAndAllLetters(string email)
-        {
-            return typeSearch(email);
-        }
-
-        public IWebElement[] FindLettersOnPage()
-        {
-            return typeFindLettersOnPage();
-        }
-
-        public bool SendResultLetter(string email, string theme, string text)
-        {
-            typeButtonSend();
-            typeAdress(email);
-            typeText(theme, text);
-            return typeLetterWasSend();
-        }
-
-        public void ReConnect()
-        {
-            driver.Navigate().GoToUrl(typeReConnectLink());
-        }
-
-        public void VerifiEmail()
-        {
-            try
-            {
-                typeVerifiEmail();
-            }
-            catch { }
-        }
+        }   
     }
 }

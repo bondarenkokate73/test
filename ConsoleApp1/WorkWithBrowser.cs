@@ -1,40 +1,39 @@
 ﻿using OpenQA.Selenium;
 using System;
-using System.Linq;
 using System.Threading;
-using OpenQA.Selenium.Chrome;
-using System.Runtime.InteropServices;
 
 namespace ConsoleApp1
 {
     public class WorkWithBrowser
     {
-        
+        IWebDriver driver;
         int countLetterFromName;
         PageObject pg;
+        WorkWithLocators workWithLocators;
         string name;
         string email;
 
-        public WorkWithBrowser(string name, string email)
+        public WorkWithBrowser(IWebDriver driver, string name, string email)
         {
+            this.driver = driver;
             this.name = name;
             this.email = email;
         }
 
-        public bool Connect(IWebDriver driver, string email, string password)
+        public bool Connect(string email, string password)
         {
             pg = new PageObject(driver, "https://gmail.com");          
             if (driver.Title.Equals("Gmail"))
             {
-                pg.loginAs(email, password);
-                pg.VerifiEmail();
+                workWithLocators.loginAs(email, password);
+                workWithLocators.VerifiEmail();
                 return true;
             }
             else if (driver.Title.Equals("Gmail – электронная почта и бесплатное хранилище от Google"))
             {
-                pg.ReConnect();
-                pg.loginAs(email, password);
-                pg.VerifiEmail();
+                ReConnect();
+                workWithLocators.loginAs(email, password);
+                workWithLocators.VerifiEmail();
                 return true;
             }
             else
@@ -47,14 +46,14 @@ namespace ConsoleApp1
         {
             countLetterFromName = 0;
 
-            IWebElement[] webs = pg.findEmailAndAllLetters(email);
+            IWebElement[] webs = workWithLocators.findEmailAndAllLetters(email);
             foreach (IWebElement element in webs)
             {
                 try
                 {
                     Thread.Sleep(1000);
                     element.Click();
-                    IWebElement[] emailInWeb = pg.FindLettersOnPage();
+                    IWebElement[] emailInWeb = workWithLocators.FindLettersOnPage();
                     foreach (IWebElement web in emailInWeb)
                     {
                         if (web.GetAttribute("email").Equals(email))
@@ -62,7 +61,7 @@ namespace ConsoleApp1
                             countLetterFromName++;
                         }
                     }
-                    pg.Back();
+                    Back();
                 }
                 catch { }
             }
@@ -73,8 +72,23 @@ namespace ConsoleApp1
         public bool SendLeter(string email)
         {
             Console.WriteLine("Письмо отправлено.");
-            return pg.SendResultLetter(email, "Тестовое задание. Бондаренко.", "Мы нашли " + countLetterFromName + " писем от Вас.");
+            return workWithLocators.SendResultLetter(email, "Тестовое задание. Бондаренко.", "Мы нашли " + countLetterFromName + " писем от Вас.");
             
+        }
+
+        public void ReConnect()
+        {
+            driver.Navigate().GoToUrl(pg.typeReConnectLink());
+        }
+
+        public void Back()
+        {
+            driver.Navigate().Back();
+        }
+
+        public void Quit()
+        {
+            driver.Quit();
         }
     }
 }
