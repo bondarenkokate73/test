@@ -6,6 +6,11 @@ namespace ConsoleApp1
     {
         PageObject pg;
 
+        public WorkWithLocators(PageObject pg)
+        {
+            this.pg = pg;
+        }
+
         public void loginAs(string username, string password)
         {
             pg.typeUsername().SendKeys(username + Keys.Enter);

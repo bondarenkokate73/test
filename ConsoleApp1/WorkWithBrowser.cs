@@ -22,7 +22,8 @@ namespace ConsoleApp1
 
         public bool Connect(string email, string password)
         {
-            pg = new PageObject(driver, "https://gmail.com");          
+            pg = new PageObject(driver, "https://gmail.com");
+            workWithLocators = new WorkWithLocators(pg);          
             if (driver.Title.Equals("Gmail"))
             {
                 workWithLocators.loginAs(email, password);
