@@ -32,9 +32,9 @@ namespace Tests
         [AllureSuite("Connect")]
         public void TestConnect()
         {
-            browser = new WorkWithBrowser(name, email);
+            browser = new WorkWithBrowser(driver, name, email);
             driver = new ChromeDriver(Environment.CurrentDirectory);
-            bool result = browser.Connect(driver, "test19bond@gmail.com", "test19bondtest19bond");
+            bool result = browser.Connect("test19bond@gmail.com", "test19bondtest19bond");
             Assert.True(result);
         }
 

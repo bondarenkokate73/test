@@ -3,9 +3,11 @@ using NUnit.Allure.Attributes;
 using NUnit.Allure.Core;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using Allure.Commons;
 
 namespace ConsoleApp1
 {
+    [TestFixture]
     [AllureNUnit]
     class Program
     {
@@ -19,16 +21,29 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
+            
+           // Test();
+        }
+
+        [SetUp]
+        public void BeforeTest()
+        {
             grid = new GRID();
             driver = grid.getDriver();     // = new ChromeDriver(Environment.CurrentDirectory);
             browser = new WorkWithBrowser(driver, name, email);
             pg = new PageObject(driver, "https://gmail.com");
-            Test();
         }
+
+        [TearDown]
+        public void AfterTest()
+        {
+            browser.Quit();
+        }
+
 
         [Test]
         [AllureSuite("Connect")]
-        static void Test()
+        static public void Test()
         {
             if (browser.Connect("test19bond@gmail.com", "test19bondtest19bond"))
             {
@@ -37,7 +52,6 @@ namespace ConsoleApp1
                 {
                     success = true;
                 }
-                browser.Quit();
             }
             else
             {
