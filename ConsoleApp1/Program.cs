@@ -11,8 +11,8 @@ namespace ConsoleApp1
     [AllureNUnit]
     class Program
     {
-        const string name = "Екатерина Бондаренко"; //Введите свое имя
-        const string email = "bondarenkokate73@yandex.ru"; //Введите почту, письма с которой надо найти
+        const string name = "Фарит Валиахметов"; //Введите свое имя
+        const string email = "farit.valiahmetov@simbirsoft.com"; //Введите почту, письма с которой надо найти
         static bool success = false;
         static WorkWithBrowser browser;
         static GRID grid;
@@ -21,8 +21,7 @@ namespace ConsoleApp1
 
         static void Main(string[] args)
         {
-            
-           // Test();
+             
         }
 
         [SetUp]
